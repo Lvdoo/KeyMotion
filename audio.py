@@ -5,14 +5,28 @@ pygame.mixer.init()
 pygame.mixer.set_num_channels(16)
 
 sounds = {
-    "DO": pygame.mixer.Sound("sounds/Do.wav"),
-    "RE": pygame.mixer.Sound("sounds/Re.wav"),
-    "MI": pygame.mixer.Sound("sounds/Mi.wav"),
-    "FA": pygame.mixer.Sound("sounds/Fa.wav"),
-    "SOL": pygame.mixer.Sound("sounds/Sol.wav"),
-    "LA": pygame.mixer.Sound("sounds/La.wav"),
-    "SI": pygame.mixer.Sound("sounds/Si.wav"),
-    "DO2": pygame.mixer.Sound("sounds/Do.wav")
+    "DO1": pygame.mixer.Sound("sounds/Do1.wav"),
+    "RE1": pygame.mixer.Sound("sounds/Re1.wav"),
+    "MI1": pygame.mixer.Sound("sounds/Mi1.wav"),
+    "FA1": pygame.mixer.Sound("sounds/Fa1.wav"),
+    "SOL1": pygame.mixer.Sound("sounds/Sol1.wav"),
+    "LA1": pygame.mixer.Sound("sounds/La1.wav"),
+    "SI1": pygame.mixer.Sound("sounds/Si1.wav"),
+    "DO2": pygame.mixer.Sound("sounds/Do2.wav"),
+    "RE2": pygame.mixer.Sound("sounds/Re2.wav"),
+    "MI2": pygame.mixer.Sound("sounds/Mi2.wav"),
+    "FA2": pygame.mixer.Sound("sounds/Fa2.wav"),
+    "SOL2": pygame.mixer.Sound("sounds/Sol2.wav"),
+    "LA2": pygame.mixer.Sound("sounds/La2.wav"),
+    "SI2": pygame.mixer.Sound("sounds/Si2.wav"),
+    "DO3": pygame.mixer.Sound("sounds/Do3.wav"),
+    "RE3": pygame.mixer.Sound("sounds/Re3.wav"),
+    "MI3": pygame.mixer.Sound("sounds/Mi3.wav"),
+    "FA3": pygame.mixer.Sound("sounds/Fa3.wav"),
+    "SOL3": pygame.mixer.Sound("sounds/Sol3.wav"),
+    "LA3": pygame.mixer.Sound("sounds/La3.wav"),
+    "SI3": pygame.mixer.Sound("sounds/Si3.wav"),
+    "DO4": pygame.mixer.Sound("sounds/Do4.wav")
 }
 
 for sound in sounds.values() : 
