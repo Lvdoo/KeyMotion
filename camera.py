@@ -11,7 +11,7 @@ def open_camera():
             from the webcam.
     """
 
-    video = cv.VideoCapture(0)
+    video = cv.VideoCapture(1)
     video.set(cv.CAP_PROP_FRAME_WIDTH, 1080)
     video.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
 
