@@ -1,6 +1,10 @@
 import time
 import cv2 as cv
 
+event = [i for i in dir(cv) if 'EVENT' in i]
+calibration_points = []
+calibration_done = False
+
 def open_camera():
     """
     Open the default camera and create a video capture stream.
@@ -93,3 +97,30 @@ def release_video(video):
 
     video.release()
     cv.destroyAllWindows()
+
+
+def calibration(event,x,y, flags, param) :
+    """
+    Register calibration points from mouse clicks.
+    The function records up to four points when the left mouse
+    button is clicked and calibration is not completed.
+
+    Args:
+        event (int):
+            OpenCV mouse event type.
+        x (int):
+            Horizontal coordinate of the mouse click.
+        y (int):
+            Vertical coordinate of the mouse click.
+        flags (int):
+            OpenCV flags associated with the mouse event.
+        param:
+            Optional parameter passed by the OpenCV mouse callback.
+    """
+
+    global calibration_points
+    if calibration_done == False :
+        if event == cv.EVENT_LBUTTONDOWN and len(calibration_points) < 4 :
+            calibration_points.append((x,y))
+
+        
