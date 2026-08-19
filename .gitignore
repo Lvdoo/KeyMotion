@@ -1,5 +1,30 @@
 /__pycache__
 /.venv
 /sounds
+
+# Unity foldersa# Python
+/__pycache__/
+/.venv/
+/sounds/
+config.json
+
+# Unity generated
+/KeyMotion_Unity/Library/
+/KeyMotion_Unity/Temp/
+/KeyMotion_Unity/obj/
+/KeyMotion_Unity/Logs/
+/KeyMotion_Unity/UserSettings/
+
+/KeyMotion_Unity/.vs/
+/KeyMotion_Unity/.vscode/
+
+# IDE generated
+/KeyMotion_Unity/*.csproj
+/KeyMotion_Unity/*.sln
+/KeyMotion_Unity/*.slnx
+
+# Unity recovery
+/KeyMotion_Unity/Assets/_Recovery/
+/KeyMotion_Unity/Assets/_Recovery.metas
 /KeyMotion_Unity
 config.json
