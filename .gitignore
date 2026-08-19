@@ -26,5 +26,4 @@ config.json
 # Unity recovery
 /KeyMotion_Unity/Assets/_Recovery/
 /KeyMotion_Unity/Assets/_Recovery.metas
-/KeyMotion_Unity
 config.json
