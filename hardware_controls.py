@@ -5,6 +5,11 @@ class HardwareControls:
         self.serial = serial.Serial(port, baudrate, timeout=0)
 
     def read_messages(self):
+        """
+        Read messages sent from the XIAO-esp32s3
+        Returns:
+            messages(string): Return the message
+        """
         messages = []
 
         while self.serial.in_waiting:
