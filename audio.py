@@ -29,8 +29,7 @@ sounds = {
     "DO4": pygame.mixer.Sound("sounds/Do4.wav")
 }
 
-for sound in sounds.values() : 
-    sound.set_volume(0.25)
+current_volume = 0.25
 
 current_key = {}
 current_channel = {}
@@ -85,6 +84,7 @@ def fade_sound(finger):
     current_channel[finger] = None
     timer[finger] = None
 
+
 def update_sound(keys, pressed_key):
     """
     Updates the sound playback according to the fingers' positions and pressed keys.
@@ -109,3 +109,20 @@ def update_sound(keys, pressed_key):
 
         if keys[finger] is None and current_key[finger] is not None:
             fade_sound(finger)
+
+
+def set_volume(new_volume):
+    """
+    Change the volume of all the sounds.
+
+    Args:
+        new_volume (float):
+            Volume between 0.0 and 1.0.
+    """
+
+    global current_volume
+
+    current_volume = max(0.0, min(1.0, float(new_volume)))
+
+    for sound in sounds.values():
+        sound.set_volume(current_volume)

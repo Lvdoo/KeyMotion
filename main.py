@@ -21,8 +21,27 @@ with HandLandmarker.create_from_options(options) as landmarker:
 
     while True :
         for message in controls.read_messages():
-            if message == "COLOR|NEXT":
+            command, separator, value = message.partition("|")
+            if not separator : 
+                print("Esp32 invalid message", message)
+                continue
+
+            command = command.strip().upper()
+            value = value.strip().upper()
+
+            if command == "COLOR" and value == "NEXT" :
                 coms.send("COLOR|NEXT")
+
+            elif command == "VOLUME" :
+                try : 
+                    volume = int(value)
+                    volume = max(0, min(100, volume))
+                    volume_percent = volume / 100
+                    audio.set_volume(volume_percent)
+
+                except ValueError :
+                    print("Invalid volume value", value)
+
         ret, frame = camera.read_frame(video)
         timestamp = camera.get_timestamp()
         if not ret : 
