@@ -5,28 +5,40 @@ event = [i for i in dir(cv) if 'EVENT' in i]
 calibration_points = []
 calibration_done = False
 
-def open_camera():
+def open_cameras():
     """
-    Open the default camera and create a video capture stream.
+    Open the top and front cameras and create video capture streams.
 
     Returns:
-        vide (cv.VideoCapture):
-            OpenCV video capture object used to read frames
-            from the webcam.
+        tuple:
+            video_top (cv.VideoCapture):
+                Capture stream for the top-view camera (finger position).
+            video_front (cv.VideoCapture):
+                Capture stream for the front-view camera (key press detection).
     """
 
-    video = cv.VideoCapture(1)
-    video.set(cv.CAP_PROP_FRAME_WIDTH, 1080)
-    video.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+    video_top = cv.VideoCapture(2, cv.CAP_DSHOW)
+    video_top.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc(*'MJPG')) 
 
-    if not video.isOpened():
-        print("Can't access camera !")
+    video_front = cv.VideoCapture(1)
+
+    video_top.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
+    video_top.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+    video_front.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
+    video_front.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+
+    if not video_top.isOpened() :
+        print("Can't access top camera!")
         exit()
 
-    return video
+    if not video_front.isOpened() :
+            print("Can't access front camera!")
+            exit()
+
+    return video_top, video_front
 
 
-def read_frame(video):
+def read_frame(video, flip_code = None):
     """
     Read a frame from the video stream and flip it horizontally.
 
@@ -47,7 +59,8 @@ def read_frame(video):
     if not ret: 
         print("Can't receive frame. Exiting...")
 
-    frame = cv.flip(frame, 1)
+    if flip_code is not None :
+        frame = cv.flip(frame, flip_code)
     return ret, frame
 
 
@@ -86,16 +99,17 @@ def get_timestamp():
     return timestamp_ms
 
 
-def release_video(video):
+def release_video(video_top, video_front):
     """
-    Release the video capture stream and close all OpenCV windows.
+    Release the video capture streams and close all OpenCV windows.
 
     Args:
         video (cv.VideoCapture):
             OpenCV video capture object to release.
     """
 
-    video.release()
+    video_top.release()
+    video_front.release()
     cv.destroyAllWindows()
 
 
@@ -122,5 +136,3 @@ def calibration(event,x,y, flags, param) :
     if calibration_done == False :
         if event == cv.EVENT_LBUTTONDOWN and len(calibration_points) < 4 :
             calibration_points.append((x,y))
-
-        

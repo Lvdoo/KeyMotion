@@ -14,10 +14,13 @@ coms = send_data.UdpComms(ip="127.0.0.1", port=8000)
 controls = hardware_controls.HardwareControls(port="COM4", baudrate=115200)
 final_calibration = []
 
-with HandLandmarker.create_from_options(options) as landmarker: 
-    video = camera.open_camera()
-    cv.namedWindow("frame")
-    cv.setMouseCallback("frame", camera.calibration)
+with HandLandmarker.create_from_options(options) as landmarker_top, \
+    HandLandmarker.create_from_options(options) as landmarker_front: 
+    video_top, video_front = camera.open_cameras()
+    fingers_detection_top = FingerDetection()
+    fingers_detection_front = FingerDetection()
+    cv.namedWindow("frame_top")
+    cv.setMouseCallback("frame_top", camera.calibration)
 
     while True :
         for message in controls.read_messages():
@@ -42,26 +45,31 @@ with HandLandmarker.create_from_options(options) as landmarker:
                 except ValueError :
                     print("Invalid volume value", value)
 
-        ret, frame = camera.read_frame(video)
+        ret_top, frame_top = camera.read_frame(video_top, flip_code = -1)
+        ret_front, frame_front = camera.read_frame(video_front)
         timestamp = camera.get_timestamp()
-        if not ret : 
+        if not ret_top or not ret_front : 
             print("Can't receive frame (stream end?). Exiting ...")
             break
 
         if camera.calibration_done == False :
-            cv.putText(frame, "Click the corners clockwise. Start with up-left", (10,20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
-            cv.putText(frame, "Reset  : R", (10,40), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
-            cv.putText(frame, "Validate  : Enter", (10,60), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
+            cv.putText(frame_top, "Click the corners clockwise. Start with up-left", (10,20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
+            cv.putText(frame_top, "Reset  : R", (10,40), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
+            cv.putText(frame_top, "Validate  : Enter", (10,60), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255))
             for points in camera.calibration_points : 
-                cv.circle(frame,(points),10,(0,0,255),-1)
-            cv.imshow('frame', frame)
+                cv.circle(frame_top,(points), 5, (0,0,255), -1)
+            cv.imshow('frame_top', frame_top)
 
         else : 
-            rgb_frame = camera.convert_to_RGB(frame)
-            height, width = rgb_frame.shape[:2]
-            result = detect_hands(landmarker, rgb_frame, timestamp)
-            finger_pos, movement_y = get_finger_data(result, width, height)
-            keys = mapping.in_touch(finger_pos)
+            rgb_frame_top = camera.convert_to_RGB(frame_top)
+            rgb_frame_front = camera.convert_to_RGB(frame_front)
+            height_top, width_top = rgb_frame_top.shape[:2]
+            height_front, width_front = rgb_frame_front.shape[:2]
+            result_top = detect_hands(landmarker_top, rgb_frame_top, timestamp)
+            result_front = detect_hands(landmarker_front, rgb_frame_front, timestamp)
+            finger_pos_top, _ = fingers_detection_top.get_finger_data(result_top, width_top, height_top)
+            finger_pos_front, movement_y = fingers_detection_front.get_finger_data(result_front, width_front, height_front)
+            keys = mapping.in_touch(finger_pos_top)
             pressed_key = interaction.press_touch(keys, movement_y)
 
             for finger in FINGERS:
@@ -80,9 +88,12 @@ with HandLandmarker.create_from_options(options) as landmarker:
                     active_notes[finger] = None
 
             audio.update_sound(keys, pressed_key)
-            annoted_image = draw_finger(rgb_frame, finger_pos)
-            bgr_image = cv.cvtColor(annoted_image, cv.COLOR_RGB2BGR)
-            cv.imshow('frame', bgr_image)
+            annoted_image_top = draw_finger(rgb_frame_top, finger_pos_top)
+            annoted_image_front = draw_finger(rgb_frame_front, finger_pos_front)
+            bgr_image_top = cv.cvtColor(annoted_image_top, cv.COLOR_RGB2BGR)
+            bgr_image_front = cv.cvtColor(annoted_image_front, cv.COLOR_RGB2BGR)
+            cv.imshow('frame_top', bgr_image_top)
+            cv.imshow('frame_front', bgr_image_front)
 
         key = cv.waitKey(1) & 0xFF
         if  key == 27 :
@@ -97,6 +108,6 @@ with HandLandmarker.create_from_options(options) as landmarker:
                 f.write(json_final_calibration) 
                 
             
-    camera.release_video(video)
+    camera.release_video(video_top, video_front)
     coms.close()
     controls.close()
