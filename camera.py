@@ -20,12 +20,12 @@ def open_cameras():
     video_top = cv.VideoCapture(2, cv.CAP_DSHOW)
     video_top.set(cv.CAP_PROP_FOURCC, cv.VideoWriter_fourcc(*'MJPG')) 
 
-    video_front = cv.VideoCapture(1)
+    video_front = cv.VideoCapture(2, cv.CAP_MSMF)
 
     video_top.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
     video_top.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
-    video_front.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
-    video_front.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
+    video_front.set(cv.CAP_PROP_FRAME_WIDTH, 640)
+    video_front.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
 
     if not video_top.isOpened() :
         print("Can't access top camera!")
