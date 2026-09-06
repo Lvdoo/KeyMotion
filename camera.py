@@ -24,8 +24,8 @@ def open_cameras():
 
     video_top.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
     video_top.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
-    video_front.set(cv.CAP_PROP_FRAME_WIDTH, 640)
-    video_front.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+    video_front.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
+    video_front.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
 
     if not video_top.isOpened() :
         print("Can't access top camera!")
