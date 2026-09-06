@@ -46,7 +46,7 @@ with HandLandmarker.create_from_options(options) as landmarker_top, \
                     print("Invalid volume value", value)
 
         ret_top, frame_top = camera.read_frame(video_top, flip_code = -1)
-        ret_front, frame_front = camera.read_frame(video_front)
+        ret_front, frame_front = camera.read_frame(video_front, flip_code = 1)
         timestamp = camera.get_timestamp()
         if not ret_top or not ret_front : 
             print("Can't receive frame (stream end?). Exiting ...")
