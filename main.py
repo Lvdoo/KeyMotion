@@ -1,12 +1,16 @@
-import camera
-import mapping
-import interaction
-import audio
-import send_data
-import hardware_controls
-from fingers_detection import *
 import json
+
 import cv2 as cv
+
+import audio
+import camera
+import hardware_controls
+import interaction
+import mapping
+import send_data
+from fingers_detection import *
+
+# Peut ajouter un lissage pour combler les pertes de détections courtes
 
 FINGERS = ["thumb", "index", "middle", "ring", "pinky"]
 active_notes = {finger : None for finger in FINGERS}

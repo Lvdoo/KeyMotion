@@ -1,5 +1,6 @@
 import serial
 
+
 class HardwareControls:
     def __init__(self, port="COM4", baudrate=115200):
         self.serial = serial.Serial(port, baudrate, timeout=0)

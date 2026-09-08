@@ -1,5 +1,6 @@
-import pygame
 import time
+
+import pygame
 
 pygame.mixer.init()
 pygame.mixer.set_num_channels(16)
