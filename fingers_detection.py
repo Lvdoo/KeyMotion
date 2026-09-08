@@ -36,64 +36,6 @@ def detect_hands(landmarker, frame, timestamp_ms) :
     return hand_landmarker_result
 
 
-def get_fingers_pos(result, width, height):
-    """
-    Extracts fingertip positions from MediaPipe landmarks.
-
-    Args:
-        result (HandLandmarkerResult):
-            Hand detection result.
-        width (int):
-            Frame width in pixels.
-        height (int):
-            Frame height in pixels.
-
-    Returns:
-        finger_pos (dict):
-            Dictionary containing x and y coordinates of
-            thumb, index, middle, ring and pinky fingertips.
-            Returns None values when no hand is detected.
-    """
-
-    hand_landmarks_list = result.hand_landmarks
-    if not hand_landmarks_list:
-        return {
-            "thumb_x" : None,
-            "thumb_y" : None,
-            "index_x" : None,
-            "index_y" : None,
-            "middle_x" : None,
-            "middle_y" : None,
-            "ring_x" : None,
-            "ring_y" : None,
-            "pinky_x" : None,
-            "pinky_y" : None}
-            
-    first_hand = hand_landmarks_list[0]
-    finger_tips = {
-        "thumb" : first_hand[4],
-        "index" : first_hand[8],
-        "middle" : first_hand[12],
-        "ring" : first_hand[16],
-        "pinky" : first_hand[20]
-    }
-    
-    finger_pos = {
-        "thumb_x" : int(finger_tips["thumb"].x * width),
-        "thumb_y" : int(finger_tips["thumb"].y * height),
-        "index_x" : int(finger_tips["index"].x * width),
-        "index_y" : int(finger_tips["index"].y * height),
-        "middle_x" : int(finger_tips["middle"].x * width),
-        "middle_y" : int(finger_tips["middle"].y * height),
-        "ring_x" : int(finger_tips["ring"].x * width),
-        "ring_y" : int(finger_tips["ring"].y * height),
-        "pinky_x" : int(finger_tips["pinky"].x * width),
-        "pinky_y" : int(finger_tips["pinky"].y * height)
-    }
-
-    return finger_pos
-
-
 def draw_finger(rgb_image, finger_pos) :
     """
     Draws circles on detected fingertip positions.
@@ -168,11 +110,48 @@ class FingerDetection :
 
         Returns:
             tuple:
-                - finger_pos (dict): Fingertip coordinates.
+                - finger_pos (dict): Dictionary containing x and y coordinates of thumb, index, middle, ring and pinky fingertips.
+                Returns None values when no hand is detected.
                 - movement_y (dict): Vertical movement of each finger.
         """
 
-        finger_pos = get_fingers_pos(result, width, height)
+        hand_landmarks_list = result.hand_landmarks
+        if not hand_landmarks_list:
+            finger_pos = {
+                "thumb_x" : None,
+                "thumb_y" : None,
+                "index_x" : None,
+                "index_y" : None,
+                "middle_x" : None,
+                "middle_y" : None,
+                "ring_x" : None,
+                "ring_y" : None,
+                "pinky_x" : None,
+                "pinky_y" : None}
+
+        else :    
+            first_hand = hand_landmarks_list[0]
+            finger_tips = {
+                "thumb" : first_hand[4],
+                "index" : first_hand[8],
+                "middle" : first_hand[12],
+                "ring" : first_hand[16],
+                "pinky" : first_hand[20]
+            }
+            
+            finger_pos = {
+                "thumb_x" : int(finger_tips["thumb"].x * width),
+                "thumb_y" : int(finger_tips["thumb"].y * height),
+                "index_x" : int(finger_tips["index"].x * width),
+                "index_y" : int(finger_tips["index"].y * height),
+                "middle_x" : int(finger_tips["middle"].x * width),
+                "middle_y" : int(finger_tips["middle"].y * height),
+                "ring_x" : int(finger_tips["ring"].x * width),
+                "ring_y" : int(finger_tips["ring"].y * height),
+                "pinky_x" : int(finger_tips["pinky"].x * width),
+                "pinky_y" : int(finger_tips["pinky"].y * height)
+            }
+
         movement_y = self.get_movement(finger_pos)
         self.update_last_y(finger_pos)
 
