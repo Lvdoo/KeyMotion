@@ -87,7 +87,7 @@ with HandLandmarker.create_from_options(options) as landmarker_top, \
                     active_notes[finger] = pressed_note
 
                 # Finger left the key he pressed
-                elif active_note is not None and current_note != active_note:
+                elif active_note is not None and (current_note != active_note or movement_y[f"movement_{finger}"] < 0) :
                     coms.send(f"{active_note}|RELEASE")
                     active_notes[finger] = None
 

@@ -26,11 +26,11 @@ def press_touch(keys, movement_y) :
 
     for finger in fingers : 
         pressed_key[finger] = None
-        if  keys[finger] is None :
+        if  keys[finger] is None or movement_y[f"movement_{finger}"] < -3 :
             is_pressed[finger] = False
             continue
     
-        if movement_y[f"movement_{finger}"]  > 5 and is_pressed[finger] == False:
+        if movement_y[f"movement_{finger}"]  > 15 and is_pressed[finger] == False:
             pressed_key[finger] = keys[finger]
             is_pressed[finger] = True
     return pressed_key
